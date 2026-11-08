@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f4d3b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Muscle Coach</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main id="stage">
+  <header class="top">
+    <div id="caption" class="caption">même séance</div>
+    <button id="settingsBtn" class="round" aria-label="Paramètres">
+      <svg viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M12 15.5A3.5 3.5 0 1 1 12 8.5a3.5 3.5 0 0 1 0 7Zm7.43-2.53c.04-.32.07-.64.07-.97s-.03-.66-.07-.98l2.11-1.65a.5.5 0 0 0 .12-.64l-2-3.46a.5.5 0 0 0-.61-.22l-2.49 1a7.3 7.3 0 0 0-1.69-.98l-.38-2.65A.49.49 0 0 0 14 2h-4a.49.49 0 0 0-.49.42l-.38 2.65c-.61.25-1.17.58-1.69.98l-2.49-1a.5.5 0 0 0-.61.22l-2 3.46a.49.49 0 0 0 .12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.65.07.97l-2.11 1.65a.5.5 0 0 0-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.04.24.25.42.49.42h4c.25 0 .45-.18.49-.42l.38-2.65c.61-.25 1.17-.58 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46a.5.5 0 0 0-.12-.64l-2.11-1.65Z"/></svg>
+    </button>
+  </header>
+
+  <div class="hud">
+    <div class="brand" id="brand">MUSCLE COACH</div>
+    <div class="stats">
+      <div><span id="reps">0</span><small>reps</small></div>
+      <div><span id="timer">0:00</span><small>temps</small></div>
+    </div>
+  </div>
+
+  <svg id="figure" viewBox="0 -110 400 890" aria-label="Animation de l'exercice">
+    <defs>
+      <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="4" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <radialGradient id="floorGlow">
+        <stop offset="0" stop-color="#9ff5e0" stop-opacity=".45"/>
+        <stop offset="1" stop-color="#9ff5e0" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="plate" x1="0" x2="1">
+        <stop offset="0" stop-color="#2a2f33"/><stop offset=".5" stop-color="#0d1012"/><stop offset="1" stop-color="#1b1f22"/>
+      </linearGradient>
+
+      <!-- Bras (côté droit de l'écran), origine = épaule -->
+      <g id="tplUpperArm">
+        <path class="skin" d="M-15 -4 Q-22 58 -13 117 L13 117 Q24 58 19 -4 Z"/>
+        <path class="muscle" data-m="triceps" d="M12 18 Q24 62 13 108 L8 105 Q16 62 7 22 Z"/>
+        <path class="muscle" data-m="biceps" d="M-9 26 Q-17 70 -5 108 Q6 113 10 98 Q13 58 3 24 Z"/>
+        <path class="muscle" data-m="delts" d="M-17 -14 Q8 -24 26 0 Q28 34 14 58 Q2 40 -6 18 Q-14 4 -17 -14 Z"/>
+        <path class="line" d="M-2 34 Q-6 70 0 104"/>
+      </g>
+      <g id="tplForearm">
+        <path class="skin" d="M-13 -2 Q-16 42 -8 100 L8 100 Q17 42 14 -2 Z"/>
+        <path class="muscle" data-m="forearm" d="M-11 4 Q-14 40 -5 82 Q0 50 2 6 Z"/>
+        <path class="muscle" data-m="forearm" d="M4 4 Q14 36 7 84 Q4 50 0 8 Z"/>
+        <path class="skin" d="M-9 98 Q-12 112 -6 124 Q2 130 8 123 Q12 110 9 98 Z"/>
+        <path class="line" d="M-4 106 L-4 120 M0 106 L0 122 M4 106 L4 120"/>
+      </g>
+      <g id="tplDumbbell">
+        <rect x="-34" y="-3.5" width="68" height="7" rx="3" fill="#3b4246"/>
+        <rect x="-44" y="-20" width="16" height="40" rx="5" fill="url(#plate)"/>
+        <rect x="28" y="-20" width="16" height="40" rx="5" fill="url(#plate)"/>
+        <ellipse cx="-44" cy="0" rx="5" ry="20" fill="#14181a"/>
+        <ellipse cx="44" cy="0" rx="5" ry="20" fill="#2a3034"/>
+        <circle cx="44" cy="0" r="3" fill="#59646a"/>
+      </g>
+
+      <!-- Jambe (côté droit de l'écran), origine = hanche -->
+      <g id="tplThigh">
+        <path class="skin" d="M-24 -6 Q-28 92 -15 176 L15 176 Q30 92 27 -10 Z"/>
+        <path class="muscle" data-m="quads" d="M-7 16 Q-12 100 -1 160 Q8 100 5 16 Z"/>
+        <path class="muscle" data-m="quads" d="M10 10 Q27 90 13 166 Q8 100 6 26 Z"/>
+        <path class="muscle" data-m="quads" d="M-18 112 Q-21 150 -8 170 Q-3 150 -7 118 Z"/>
+        <path class="muscle" data-m="adductors" d="M-22 4 Q-26 60 -16 104 Q-10 60 -10 12 Z"/>
+      </g>
+      <g id="tplShin">
+        <circle class="skin" cx="0" cy="0" r="10"/>
+        <path class="skin" d="M-13 2 Q-19 62 -8 160 L8 160 Q17 62 13 2 Z"/>
+        <path class="muscle" data-m="calves" d="M-13 12 Q-20 50 -9 96 Q-5 50 -6 14 Z"/>
+        <path class="muscle" data-m="calves" d="M12 12 Q18 50 8 92 Q5 50 6 14 Z"/>
+        <path class="line" d="M0 14 Q2 80 0 150"/>
+      </g>
+      <g id="tplFoot">
+        <path class="skin" d="M-9 0 Q-14 18 -10 26 Q8 32 30 27 Q30 20 10 2 Z"/>
+        <path class="line" d="M8 20 L26 25 M4 22 L22 28"/>
+      </g>
+    </defs>
+
+    <ellipse cx="200" cy="772" rx="140" ry="16" fill="url(#floorGlow)"/>
+
+    <g id="root">
+      <!-- Jambes -->
+      <g id="legL"><g class="thighWrap"><g class="thighScale"><use href="#tplThigh"/></g>
+        <g class="shin"><use href="#tplShin"/><g class="foot"><use href="#tplFoot"/></g></g></g></g>
+      <g id="legR"><g class="thighWrap"><g class="thighScale"><use href="#tplThigh"/></g>
+        <g class="shin"><use href="#tplShin"/><g class="foot"><use href="#tplFoot"/></g></g></g></g>
+
+      <!-- Tronc -->
+      <g id="torso">
+        <path class="skin" d="M138 172 Q130 232 150 292 Q156 342 165 386 L170 408 L230 408 L235 386 Q244 342 250 292 Q270 232 262 172 Q200 186 138 172 Z"/>
+        <path class="muscle" data-m="traps" d="M184 146 Q162 164 140 172 Q170 182 200 180 Q230 182 260 172 Q238 164 216 146 Z"/>
+        <path class="muscle" data-m="chest" d="M199 186 Q170 178 146 190 Q142 232 164 250 Q190 256 199 240 Z"/>
+        <path class="muscle" data-m="chest" d="M201 186 Q230 178 254 190 Q258 232 236 250 Q210 256 201 240 Z"/>
+        <path class="muscle" data-m="obliques" d="M156 262 Q150 312 168 372 L176 368 Q170 310 174 262 Z"/>
+        <path class="muscle" data-m="obliques" d="M244 262 Q250 312 232 372 L224 368 Q230 310 226 262 Z"/>
+        <g id="abs">
+          <rect class="muscle" data-m="abs" x="178" y="256" width="20" height="30" rx="7"/>
+          <rect class="muscle" data-m="abs" x="202" y="256" width="20" height="30" rx="7"/>
+          <rect class="muscle" data-m="abs" x="179" y="290" width="19" height="30" rx="7"/>
+          <rect class="muscle" data-m="abs" x="202" y="290" width="19" height="30" rx="7"/>
+          <rect class="muscle" data-m="abs" x="180" y="324" width="18" height="38" rx="8"/>
+          <rect class="muscle" data-m="abs" x="202" y="324" width="18" height="38" rx="8"/>
+        </g>
+        <path class="line" d="M165 386 Q200 432 235 386 M200 186 L200 250"/>
+        <!-- Cou + tête -->
+        <path class="skin" d="M185 120 L183 166 L217 166 L215 120 Z"/>
+        <path class="line" d="M188 132 L198 166 M212 132 L202 166"/>
+        <path class="skin" d="M200 52 C224 52 232 74 231 96 C230 118 216 136 200 138 C184 136 170 118 169 96 C168 74 176 52 200 52 Z"/>
+      </g>
+
+      <!-- Bras -->
+      <g id="armL"><use href="#tplUpperArm"/><g class="forearm"><g class="foreScale"><use href="#tplForearm"/></g><g class="dumbbell"><use href="#tplDumbbell"/></g></g></g>
+      <g id="armR"><use href="#tplUpperArm"/><g class="forearm"><g class="foreScale"><use href="#tplForearm"/></g><g class="dumbbell"><use href="#tplDumbbell"/></g></g></g>
+    </g>
+  </svg>
+
+  <div class="ticker" aria-hidden="true"><div id="tickerTrack"></div></div>
+
+  <section class="panel">
+    <div class="info">
+      <div>
+        <h1 id="exName">Curl biceps</h1>
+        <p id="exMuscles">Biceps · Avant-bras</p>
+      </div>
+      <button id="playBtn" class="play" aria-label="Pause">
+        <svg id="icPause" viewBox="0 0 24 24" width="26" height="26"><path fill="currentColor" d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>
+        <svg id="icPlay" viewBox="0 0 24 24" width="26" height="26" hidden><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
+      </button>
+    </div>
+    <div id="chips" class="chips"></div>
+    <label class="speed">Vitesse <input id="speed" type="range" min="0.4" max="2" step="0.1" value="1"><output id="speedOut">1.0×</output></label>
+  </section>
+</main>
+
+<dialog id="settings">
+  <form method="dialog">
+    <h2>Ton app</h2>
+    <label>Nom de l'app <input id="setBrand" maxlength="24"></label>
+    <label>Phrases de la bulle (une par ligne)
+      <textarea id="setCaptions" rows="3"></textarea></label>
+    <label>Texte défilant (un par ligne)
+      <textarea id="setTicker" rows="3"></textarea></label>
+    <div class="row">
+      <label>Fond <input id="setBg" type="color"></label>
+      <label>Muscle <input id="setAccent" type="color"></label>
+    </div>
+    <div class="row end">
+      <button type="button" id="resetBtn" class="ghost">Réinitialiser</button>
+      <button value="ok" class="primary">OK</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="app.js"></script>
+</body>
+</html>
